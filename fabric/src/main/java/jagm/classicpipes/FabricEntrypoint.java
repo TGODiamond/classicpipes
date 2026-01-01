@@ -48,6 +48,7 @@ public class FabricEntrypoint implements ModInitializer {
         registerBlockEntity("obsidian_pipe", ClassicPipes.OBSIDIAN_PIPE_ENTITY);
         registerBlockEntity("bone_pipe", ClassicPipes.BONE_PIPE_ENTITY);
         registerBlockEntity("routing_pipe", ClassicPipes.ROUTING_PIPE_ENTITY);
+        registerBlockEntity("retriever_pipe", ClassicPipes.RETRIEVER_PIPE_ENTITY);
         registerBlockEntity("provider_pipe", ClassicPipes.PROVIDER_PIPE_ENTITY);
         registerBlockEntity("request_pipe", ClassicPipes.REQUEST_PIPE_ENTITY);
         registerBlockEntity("stocking_pipe", ClassicPipes.STOCKING_PIPE_ENTITY);
@@ -73,6 +74,7 @@ public class FabricEntrypoint implements ModInitializer {
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.OBSIDIAN_PIPE_ENTITY);
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.BONE_PIPE_ENTITY);
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.ROUTING_PIPE_ENTITY);
+        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.RETRIEVER_PIPE_ENTITY);
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.PROVIDER_PIPE_ENTITY);
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.REQUEST_PIPE_ENTITY);
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.STOCKING_PIPE_ENTITY);
@@ -90,6 +92,7 @@ public class FabricEntrypoint implements ModInitializer {
 
         registerMenu("diamond_pipe", ClassicPipes.DIAMOND_PIPE_MENU);
         registerMenu("routing_pipe", ClassicPipes.ROUTING_PIPE_MENU);
+        registerMenu("retriever_pipe", ClassicPipes.RETRIEVER_PIPE_MENU);
         registerMenu("provider_pipe", ClassicPipes.PROVIDER_PIPE_MENU);
         registerMenu("request", ClassicPipes.REQUEST_MENU);
         registerMenu("stocking_pipe", ClassicPipes.STOCKING_PIPE_MENU);

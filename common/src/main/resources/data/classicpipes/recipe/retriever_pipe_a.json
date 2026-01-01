@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": "minecraft:quartz_block",
+    "W": "minecraft:tinted_glass",
+    "X": "minecraft:dropper"
+  },
+  "pattern": [
+    "OWO",
+    " X "
+  ],
+  "result": {
+    "count": 8,
+    "id": "classicpipes:retriever_pipe"
+  }
+}

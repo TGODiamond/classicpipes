@@ -64,6 +64,7 @@ public class ForgeEntrypoint {
                 helper.register("obsidian_pipe", ClassicPipes.OBSIDIAN_PIPE_ENTITY);
                 helper.register("bone_pipe", ClassicPipes.BONE_PIPE_ENTITY);
                 helper.register("routing_pipe", ClassicPipes.ROUTING_PIPE_ENTITY);
+                helper.register("retriever_pipe", ClassicPipes.RETRIEVER_PIPE_ENTITY);
                 helper.register("provider_pipe", ClassicPipes.PROVIDER_PIPE_ENTITY);
                 helper.register("request_pipe", ClassicPipes.REQUEST_PIPE_ENTITY);
                 helper.register("stocking_pipe", ClassicPipes.STOCKING_PIPE_ENTITY);
@@ -83,6 +84,7 @@ public class ForgeEntrypoint {
             event.register(ForgeRegistries.Keys.MENU_TYPES, helper -> {
                 helper.register("diamond_pipe", ClassicPipes.DIAMOND_PIPE_MENU);
                 helper.register("routing_pipe", ClassicPipes.ROUTING_PIPE_MENU);
+                helper.register("retriever_pipe", ClassicPipes.RETRIEVER_PIPE_MENU);
                 helper.register("provider_pipe", ClassicPipes.PROVIDER_PIPE_MENU);
                 helper.register("request", ClassicPipes.REQUEST_MENU);
                 helper.register("stocking_pipe", ClassicPipes.STOCKING_PIPE_MENU);
@@ -174,6 +176,7 @@ public class ForgeEntrypoint {
                 ForgeClientPacketHandler.registerClientPayload(ClientBoundItemListPayload.class, ClientBoundItemListPayload.STREAM_CODEC);
                 MenuScreens.register(ClassicPipes.DIAMOND_PIPE_MENU, DiamondPipeScreen::new);
                 MenuScreens.register(ClassicPipes.ROUTING_PIPE_MENU, RoutingPipeScreen::new);
+                MenuScreens.register(ClassicPipes.RETRIEVER_PIPE_MENU, RetrieverPipeScreen::new);
                 MenuScreens.register(ClassicPipes.PROVIDER_PIPE_MENU, ProviderPipeScreen::new);
                 MenuScreens.register(ClassicPipes.REQUEST_MENU, RequestScreen::new);
                 MenuScreens.register(ClassicPipes.STOCKING_PIPE_MENU, StockingPipeScreen::new);
@@ -203,6 +206,7 @@ public class ForgeEntrypoint {
             event.registerBlockEntityRenderer(ClassicPipes.OBSIDIAN_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.BONE_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.ROUTING_PIPE_ENTITY, PipeRenderer::new);
+            event.registerBlockEntityRenderer(ClassicPipes.RETRIEVER_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.PROVIDER_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.REQUEST_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.STOCKING_PIPE_ENTITY, PipeRenderer::new);

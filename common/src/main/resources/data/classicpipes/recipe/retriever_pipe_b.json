@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": "#classicpipes:pipes/networked",
+    "W": "minecraft:dropper"
+  },
+  "pattern": [
+    "OOO",
+    "OWO",
+    "OOO"
+  ],
+  "result": {
+    "count": 8,
+    "id": "classicpipes:retriever_pipe"
+  }
+}

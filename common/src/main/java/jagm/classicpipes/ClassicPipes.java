@@ -77,6 +77,7 @@ public class ClassicPipes {
     public static final Block OBSIDIAN_PIPE = createPipe("obsidian_pipe", ObsidianPipeBlock::new, SoundType.DECORATED_POT, MapColor.COLOR_BLACK, 0.25F, translateDesc("obsidian_pipe"));
     public static final Block BONE_PIPE = createPipe("bone_pipe", BonePipeBlock::new, SoundType.BONE_BLOCK, MapColor.SAND, 0.25F, translateDesc("bone_pipe"));
     public static final Block ROUTING_PIPE = createPipe("routing_pipe", NetworkedPipeBlock::new, SoundType.COPPER, MapColor.COLOR_BLACK, 0.25F, translateDesc("routing_pipe.a"), translateDesc("routing_pipe.b"));
+    public static final Block RETRIEVER_PIPE = createPipe("retriever_pipe", RetrieverPipeBlock::new, SoundType.COPPER, MapColor.COLOR_BLACK, 0.25F, translateDesc("retriever_pipe"));
     public static final Block PROVIDER_PIPE = createPipe("provider_pipe", ProviderPipeBlock::new, SoundType.COPPER, MapColor.COLOR_BLACK, 0.25F, translateDesc("provider_pipe"));
     public static final Block REQUEST_PIPE = createPipe("request_pipe", RequestPipeBlock::new, SoundType.COPPER, MapColor.COLOR_BLACK, 0.25F, translateDesc("request_pipe"));
     public static final Block STOCKING_PIPE = createPipe("stocking_pipe", StockingPipeBlock::new, SoundType.COPPER, MapColor.COLOR_BLACK, 0.25F, translateDesc("stocking_pipe"));
@@ -113,6 +114,7 @@ public class ClassicPipes {
     public static final BlockEntityType<ObsidianPipeEntity> OBSIDIAN_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(ObsidianPipeEntity::new, OBSIDIAN_PIPE);
     public static final BlockEntityType<BonePipeEntity> BONE_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(BonePipeEntity::new, BONE_PIPE);
     public static final BlockEntityType<RoutingPipeEntity> ROUTING_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(RoutingPipeEntity::new, ROUTING_PIPE);
+    public static final BlockEntityType<RetrieverPipeEntity> RETRIEVER_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(RetrieverPipeEntity::new, RETRIEVER_PIPE);
     public static final BlockEntityType<ProviderPipeEntity> PROVIDER_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(ProviderPipeEntity::new, PROVIDER_PIPE);
     public static final BlockEntityType<RequestPipeEntity> REQUEST_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(RequestPipeEntity::new, REQUEST_PIPE);
     public static final BlockEntityType<StockingPipeEntity> STOCKING_PIPE_ENTITY = Services.LOADER_SERVICE.createBlockEntityType(StockingPipeEntity::new, STOCKING_PIPE);
@@ -150,6 +152,7 @@ public class ClassicPipes {
 
     public static final MenuType<DiamondPipeMenu> DIAMOND_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(DiamondPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
     public static final MenuType<RoutingPipeMenu> ROUTING_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(RoutingPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
+    public static final MenuType<RetrieverPipeMenu> RETRIEVER_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(RetrieverPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
     public static final MenuType<ProviderPipeMenu> PROVIDER_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(ProviderPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
     public static final MenuType<RequestMenu> REQUEST_MENU = Services.LOADER_SERVICE.createMenuType(RequestMenu::new, ClientBoundItemListPayload.STREAM_CODEC);
     public static final MenuType<StockingPipeMenu> STOCKING_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(StockingPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);

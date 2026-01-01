@@ -1,0 +1,318 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_unlinked"
+      },
+      "when": {
+        "north": "unlinked",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_blocked"
+      },
+      "when": {
+        "north": "unlinked",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_linked"
+      },
+      "when": {
+        "north": "linked"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle"
+      },
+      "when": {
+        "north": "none",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle_blocked"
+      },
+      "when": {
+        "north": "none",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_unlinked",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "unlinked",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_blocked",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "unlinked",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_linked",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "linked"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "none",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle_blocked",
+        "uvlock": true,
+        "y": 90
+      },
+      "when": {
+        "east": "none",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_unlinked",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "unlinked",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_blocked",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "unlinked",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_linked",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "linked"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "none",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle_blocked",
+        "uvlock": true,
+        "y": 180
+      },
+      "when": {
+        "south": "none",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_unlinked",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "unlinked",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_blocked",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "unlinked",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_linked",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "linked"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "none",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle_blocked",
+        "uvlock": true,
+        "y": 270
+      },
+      "when": {
+        "west": "none",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_unlinked",
+        "uvlock": true,
+        "x": 270
+      },
+      "when": {
+        "up": "unlinked",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_blocked",
+        "uvlock": true,
+        "x": 270
+      },
+      "when": {
+        "up": "unlinked",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_linked",
+        "uvlock": true,
+        "x": 270
+      },
+      "when": {
+        "up": "linked"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle",
+        "uvlock": true,
+        "x": 270
+      },
+      "when": {
+        "up": "none",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle_blocked",
+        "uvlock": true,
+        "x": 270
+      },
+      "when": {
+        "up": "none",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_unlinked",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "unlinked",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_blocked",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "unlinked",
+        "enabled": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/routing_pipe_side_linked",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "linked"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "none",
+        "enabled": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "classicpipes:block/retriever_pipe_middle_blocked",
+        "uvlock": true,
+        "x": 90
+      },
+      "when": {
+        "down": "none",
+        "enabled": "false"
+      }
+    }
+  ]
+}

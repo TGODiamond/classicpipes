@@ -55,6 +55,7 @@ public class NeoForgeEntrypoint {
                 helper.register(MiscUtil.identifier("obsidian_pipe"), ClassicPipes.OBSIDIAN_PIPE_ENTITY);
                 helper.register(MiscUtil.identifier("bone_pipe"), ClassicPipes.BONE_PIPE_ENTITY);
                 helper.register(MiscUtil.identifier("routing_pipe"), ClassicPipes.ROUTING_PIPE_ENTITY);
+                helper.register(MiscUtil.identifier("retriever_pipe"), ClassicPipes.RETRIEVER_PIPE_ENTITY);
                 helper.register(MiscUtil.identifier("provider_pipe"), ClassicPipes.PROVIDER_PIPE_ENTITY);
                 helper.register(MiscUtil.identifier("request_pipe"), ClassicPipes.REQUEST_PIPE_ENTITY);
                 helper.register(MiscUtil.identifier("stocking_pipe"), ClassicPipes.STOCKING_PIPE_ENTITY);
@@ -74,6 +75,7 @@ public class NeoForgeEntrypoint {
             event.register(Registries.MENU, helper -> {
                 helper.register(MiscUtil.identifier("diamond_pipe"), ClassicPipes.DIAMOND_PIPE_MENU);
                 helper.register(MiscUtil.identifier("routing_pipe"), ClassicPipes.ROUTING_PIPE_MENU);
+                helper.register(MiscUtil.identifier("retriever_pipe"), ClassicPipes.RETRIEVER_PIPE_MENU);
                 helper.register(MiscUtil.identifier("provider_pipe"), ClassicPipes.PROVIDER_PIPE_MENU);
                 helper.register(MiscUtil.identifier("request"), ClassicPipes.REQUEST_MENU);
                 helper.register(MiscUtil.identifier("stocking_pipe"), ClassicPipes.STOCKING_PIPE_MENU);
@@ -99,6 +101,7 @@ public class NeoForgeEntrypoint {
             event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.OBSIDIAN_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
             event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.BONE_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
             event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.ROUTING_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
+            event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.RETRIEVER_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
             event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.PROVIDER_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
             event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.REQUEST_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
             event.registerBlockEntity(Capabilities.Item.BLOCK, ClassicPipes.STOCKING_PIPE_ENTITY, NeoForgeItemPipeWrapper::new);
@@ -161,6 +164,7 @@ public class NeoForgeEntrypoint {
             event.registerBlockEntityRenderer(ClassicPipes.OBSIDIAN_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.BONE_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.ROUTING_PIPE_ENTITY, PipeRenderer::new);
+            event.registerBlockEntityRenderer(ClassicPipes.RETRIEVER_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.PROVIDER_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.REQUEST_PIPE_ENTITY, PipeRenderer::new);
             event.registerBlockEntityRenderer(ClassicPipes.STOCKING_PIPE_ENTITY, PipeRenderer::new);
@@ -188,6 +192,7 @@ public class NeoForgeEntrypoint {
         public static void onRegisterScreens(RegisterMenuScreensEvent event) {
             event.register(ClassicPipes.DIAMOND_PIPE_MENU, DiamondPipeScreen::new);
             event.register(ClassicPipes.ROUTING_PIPE_MENU, RoutingPipeScreen::new);
+            event.register(ClassicPipes.RETRIEVER_PIPE_MENU, RetrieverPipeScreen::new);
             event.register(ClassicPipes.PROVIDER_PIPE_MENU, ProviderPipeScreen::new);
             event.register(ClassicPipes.REQUEST_MENU, RequestScreen::new);
             event.register(ClassicPipes.STOCKING_PIPE_MENU, StockingPipeScreen::new);
