@@ -16,8 +16,10 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -25,6 +27,8 @@ import net.minecraft.stats.StatFormatter;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
@@ -39,6 +43,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.MapColor;
+import org.apache.commons.lang3.function.TriFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +51,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-public class ClassicPipes {
+public final class ClassicPipes {
 
     public static final String MOD_ID = "classicpipes";
     public static final String MOD_NAME = "Classic Pipes";
@@ -57,6 +62,7 @@ public class ClassicPipes {
     public static final Map<String, BlockEntityType<? extends ItemPipeEntity>> ITEM_PIPE_ENTITIES = new HashMap<>();
     public static final Map<String, BlockEntityType<? extends FluidPipeEntity>> FLUID_PIPE_ENTITIES = new HashMap<>();
     public static final Map<String, BlockEntityType<? extends BlockEntity>> BlOCK_ENTITIES = new HashMap<>();
+    public static final Map<String, MenuType<? extends AbstractContainerMenu>> MENUS = new HashMap<>();
 
     public static final Map<String, SoundEvent> SOUNDS = new LinkedHashMap<>();
 
@@ -157,17 +163,17 @@ public class ClassicPipes {
     public static final CreativeModeTab PIPES_TAB = CreativeModeTab.builder(CreativeModeTab.Row.BOTTOM, 0).title(Component.translatable("itemGroup." + MOD_ID + ".pipes")).icon(() -> new ItemStack(COPPER_PIPE)).build();
     public static final ResourceKey<CreativeModeTab> PIPES_TAB_KEY = MiscUtil.makeKey(BuiltInRegistries.CREATIVE_MODE_TAB.key(), "pipes");
 
-    public static final MenuType<DiamondPipeMenu> DIAMOND_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(DiamondPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
-    public static final MenuType<RoutingPipeMenu> ROUTING_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(RoutingPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
-    public static final MenuType<ProviderPipeMenu> PROVIDER_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(ProviderPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
-    public static final MenuType<RequestMenu> REQUEST_MENU = Services.LOADER_SERVICE.createMenuType(RequestMenu::new, ClientBoundItemListPayload.STREAM_CODEC);
-    public static final MenuType<StockingPipeMenu> STOCKING_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(StockingPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
-    public static final MenuType<MatchingPipeMenu> MATCHING_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(MatchingPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
-    public static final MenuType<StoragePipeMenu> STORAGE_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(StoragePipeMenu::new, ClientBoundThreeBoolsPayload.STREAM_CODEC);
-    public static final MenuType<RecipePipeMenu> RECIPE_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(RecipePipeMenu::new, ClientBoundRecipePipePayload.STREAM_CODEC);
-    public static final MenuType<DiamondFluidPipeMenu> DIAMOND_FLUID_PIPE_MENU = Services.LOADER_SERVICE.createSimpleMenuType(DiamondFluidPipeMenu::new);
-    public static final MenuType<AdvancedCopperPipeMenu> ADVANCED_COPPER_PIPE_MENU = Services.LOADER_SERVICE.createMenuType(AdvancedCopperPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
-    public static final MenuType<AdvancedCopperFluidPipeMenu> ADVANCED_COPPER_FLUID_PIPE_MENU = Services.LOADER_SERVICE.createSimpleMenuType(AdvancedCopperFluidPipeMenu::new);
+    public static final MenuType<DiamondPipeMenu> DIAMOND_PIPE_MENU = createMenu("diamond_pipe", DiamondPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
+    public static final MenuType<RoutingPipeMenu> ROUTING_PIPE_MENU = createMenu("routing_pipe", RoutingPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
+    public static final MenuType<ProviderPipeMenu> PROVIDER_PIPE_MENU = createMenu("provider_pipe", ProviderPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
+    public static final MenuType<RequestMenu> REQUEST_MENU = createMenu("request", RequestMenu::new, ClientBoundItemListPayload.STREAM_CODEC);
+    public static final MenuType<StockingPipeMenu> STOCKING_PIPE_MENU = createMenu("stocking_pipe", StockingPipeMenu::new, ClientBoundTwoBoolsPayload.STREAM_CODEC);
+    public static final MenuType<MatchingPipeMenu> MATCHING_PIPE_MENU = createMenu("matching_pipe", MatchingPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
+    public static final MenuType<StoragePipeMenu> STORAGE_PIPE_MENU = createMenu("storage_pipe", StoragePipeMenu::new, ClientBoundThreeBoolsPayload.STREAM_CODEC);
+    public static final MenuType<RecipePipeMenu> RECIPE_PIPE_MENU = createMenu("recipe_pipe", RecipePipeMenu::new, ClientBoundRecipePipePayload.STREAM_CODEC);
+    public static final MenuType<DiamondFluidPipeMenu> DIAMOND_FLUID_PIPE_MENU = createMenu("diamond_fluid_pipe", DiamondFluidPipeMenu::new);
+    public static final MenuType<AdvancedCopperPipeMenu> ADVANCED_COPPER_PIPE_MENU = createMenu("advanced_copper_pipe", AdvancedCopperPipeMenu::new, ClientBoundBoolPayload.STREAM_CODEC);
+    public static final MenuType<AdvancedCopperFluidPipeMenu> ADVANCED_COPPER_FLUID_PIPE_MENU = createMenu("advanced_copper_fluid_pipe", AdvancedCopperFluidPipeMenu::new);
 
     public static final Identifier ITEMS_REQUESTED_STAT = MiscUtil.identifier("items_requested");
 
@@ -185,6 +191,17 @@ public class ClassicPipes {
         BlockEntityType<T> entityType = createBlockEntityType(name, factory, blocks);
         FLUID_PIPE_ENTITIES.put(name, entityType);
         return entityType;
+    }
+
+    private static <M extends AbstractContainerMenu> MenuType<M> createMenu(String name, BiFunction<Integer, Inventory, M> factory) {
+        MenuType<M> menuType = Services.LOADER_SERVICE.createSimpleMenuType(factory);
+        MENUS.put(name, menuType);
+        return menuType;
+    }
+    private static <M extends AbstractContainerMenu, D> MenuType<M> createMenu(String name, TriFunction<Integer, Inventory, D, M> factory, StreamCodec<RegistryFriendlyByteBuf, D> codec) {
+        MenuType<M> menuType = Services.LOADER_SERVICE.createMenuType(factory, codec);
+        MENUS.put(name, menuType);
+        return menuType;
     }
 
     private static Item createItem(String name, Function<Item.Properties, Item> factory, int stackSize, boolean fashionable, Component... lore) {

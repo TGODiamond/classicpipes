@@ -37,7 +37,7 @@ import java.util.Map;
 
 @Mod(ClassicPipes.MOD_ID)
 @SuppressWarnings("unused")
-public class ForgeEntrypoint {
+public final class ForgeEntrypoint {
 
     @Mod.EventBusSubscriber(modid = ClassicPipes.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ModEventHandler {
@@ -53,23 +53,13 @@ public class ForgeEntrypoint {
             event.register(Registries.TRIGGER_TYPE, helper -> helper.register(MiscUtil.identifier("request_item"), ClassicPipes.REQUEST_ITEM_TRIGGER));
             event.register(Registries.CUSTOM_STAT, helper -> helper.register(ClassicPipes.ITEMS_REQUESTED_STAT, ClassicPipes.ITEMS_REQUESTED_STAT));
 
-            event.register(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, helper -> {
-                ClassicPipes.BlOCK_ENTITIES.forEach(helper::register);
-            });
+            event.register(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, helper ->
+                ClassicPipes.BlOCK_ENTITIES.forEach(helper::register)
+            );
 
-            event.register(ForgeRegistries.Keys.MENU_TYPES, helper -> {
-                helper.register("diamond_pipe", ClassicPipes.DIAMOND_PIPE_MENU);
-                helper.register("routing_pipe", ClassicPipes.ROUTING_PIPE_MENU);
-                helper.register("provider_pipe", ClassicPipes.PROVIDER_PIPE_MENU);
-                helper.register("request", ClassicPipes.REQUEST_MENU);
-                helper.register("stocking_pipe", ClassicPipes.STOCKING_PIPE_MENU);
-                helper.register("matching_pipe", ClassicPipes.MATCHING_PIPE_MENU);
-                helper.register("storage_pipe", ClassicPipes.STORAGE_PIPE_MENU);
-                helper.register("recipe_pipe", ClassicPipes.RECIPE_PIPE_MENU);
-                helper.register("diamond_fluid_pipe", ClassicPipes.DIAMOND_FLUID_PIPE_MENU);
-                helper.register("advanced_copper_pipe", ClassicPipes.ADVANCED_COPPER_PIPE_MENU);
-                helper.register("advanced_copper_fluid_pipe", ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_MENU);
-            });
+            event.register(ForgeRegistries.Keys.MENU_TYPES, helper ->
+                ClassicPipes.MENUS.forEach(helper::register)
+            );
 
         }
 

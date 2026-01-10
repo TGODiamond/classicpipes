@@ -2,15 +2,25 @@ package jagm.classicpipes;
 
 import jagm.classicpipes.blockentity.FabricFluidPipeWrapper;
 import jagm.classicpipes.blockentity.FabricItemPipeWrapper;
+import jagm.classicpipes.client.renderer.FluidPipeRenderer;
+import jagm.classicpipes.client.renderer.PipeRenderer;
+import jagm.classicpipes.client.renderer.RecipePipeRenderer;
+import jagm.classicpipes.client.screen.*;
 import jagm.classicpipes.network.*;
 import jagm.classicpipes.util.MiscUtil;
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidStorage;
 import net.fabricmc.fabric.api.transfer.v1.item.ItemStorage;
+import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -22,7 +32,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 @SuppressWarnings("unused")
-public class FabricEntrypoint implements ModInitializer {
+public final class FabricEntrypoint implements ModInitializer, ClientModInitializer {
 
     public static final long FLUID_CONVERSION_RATE = FluidConstants.BUCKET / 1000;
 
@@ -49,17 +59,7 @@ public class FabricEntrypoint implements ModInitializer {
         // Pipe(s) with a unique renderer
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.RECIPE_PIPE_ENTITY);
 
-        registerMenu("diamond_pipe", ClassicPipes.DIAMOND_PIPE_MENU);
-        registerMenu("routing_pipe", ClassicPipes.ROUTING_PIPE_MENU);
-        registerMenu("provider_pipe", ClassicPipes.PROVIDER_PIPE_MENU);
-        registerMenu("request", ClassicPipes.REQUEST_MENU);
-        registerMenu("stocking_pipe", ClassicPipes.STOCKING_PIPE_MENU);
-        registerMenu("matching_pipe", ClassicPipes.MATCHING_PIPE_MENU);
-        registerMenu("storage_pipe", ClassicPipes.STORAGE_PIPE_MENU);
-        registerMenu("recipe_pipe", ClassicPipes.RECIPE_PIPE_MENU);
-        registerMenu("diamond_fluid_pipe", ClassicPipes.DIAMOND_FLUID_PIPE_MENU);
-        registerMenu("advanced_copper_pipe", ClassicPipes.ADVANCED_COPPER_PIPE_MENU);
-        registerMenu("advanced_copper_fluid_pipe", ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_MENU);
+        ClassicPipes.MENUS.forEach(FabricEntrypoint::registerMenu);
 
         ItemGroupEvents.modifyEntriesEvent(ClassicPipes.PIPES_TAB_KEY).register(tab -> ClassicPipes.ITEMS.forEach((name, item) -> tab.accept(item)));
 
@@ -75,6 +75,35 @@ public class FabricEntrypoint implements ModInitializer {
         registerServerPayload(ServerBoundBlockingModePayload.TYPE, ServerBoundBlockingModePayload.STREAM_CODEC);
 
         PayloadTypeRegistry.playS2C().register(ClientBoundItemListPayload.TYPE, ClientBoundItemListPayload.STREAM_CODEC);
+
+    }
+
+    @Override
+    public void onInitializeClient() {
+
+        ClassicPipes.TRANSPARENT_BLOCKS.forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
+        ClassicPipes.ITEM_PIPE_ENTITIES.forEach((name, entityType) ->
+                BlockEntityRenderers.register(entityType, PipeRenderer::new)
+        );
+        ClassicPipes.FLUID_PIPE_ENTITIES.forEach((name, entityType) ->
+                BlockEntityRenderers.register(entityType, FluidPipeRenderer::new)
+        );
+        // Uses a special renderer
+        BlockEntityRenderers.register(ClassicPipes.RECIPE_PIPE_ENTITY, RecipePipeRenderer::new);
+
+        MenuScreens.register(ClassicPipes.DIAMOND_PIPE_MENU, DiamondPipeScreen::new);
+        MenuScreens.register(ClassicPipes.ROUTING_PIPE_MENU, RoutingPipeScreen::new);
+        MenuScreens.register(ClassicPipes.PROVIDER_PIPE_MENU, ProviderPipeScreen::new);
+        MenuScreens.register(ClassicPipes.REQUEST_MENU, RequestScreen::new);
+        MenuScreens.register(ClassicPipes.STOCKING_PIPE_MENU, StockingPipeScreen::new);
+        MenuScreens.register(ClassicPipes.MATCHING_PIPE_MENU, MatchingPipeScreen::new);
+        MenuScreens.register(ClassicPipes.STORAGE_PIPE_MENU, StoragePipeScreen::new);
+        MenuScreens.register(ClassicPipes.RECIPE_PIPE_MENU, RecipePipeScreen::new);
+        MenuScreens.register(ClassicPipes.DIAMOND_FLUID_PIPE_MENU, DiamondFluidPipeScreen::new);
+        MenuScreens.register(ClassicPipes.ADVANCED_COPPER_PIPE_MENU, AdvancedCopperPipeScreen::new);
+        MenuScreens.register(ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_MENU, AdvancedCopperFluidPipeScreen::new);
+
+        ClientPlayNetworking.registerGlobalReceiver(ClientBoundItemListPayload.TYPE, (payload, context) -> payload.handle(context.player()));
 
     }
 

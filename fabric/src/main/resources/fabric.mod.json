@@ -19,7 +19,7 @@
             "jagm.classicpipes.FabricEntrypoint"
         ],
         "client": [
-            "jagm.classicpipes.client.FabricClientEntrypoint"
+            "jagm.classicpipes.FabricEntrypoint"
         ],
         "jei_mod_plugin": [
             "jagm.classicpipes.compat.FabricJEIPlugin"

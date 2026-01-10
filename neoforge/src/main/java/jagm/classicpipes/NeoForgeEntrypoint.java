@@ -28,7 +28,7 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 
 @Mod(ClassicPipes.MOD_ID)
 @SuppressWarnings("unused")
-public class NeoForgeEntrypoint {
+public final class NeoForgeEntrypoint {
 
     @EventBusSubscriber(modid = ClassicPipes.MOD_ID)
     public static class ModEventHandler {
@@ -51,17 +51,9 @@ public class NeoForgeEntrypoint {
             });
 
             event.register(Registries.MENU, helper -> {
-                helper.register(MiscUtil.identifier("diamond_pipe"), ClassicPipes.DIAMOND_PIPE_MENU);
-                helper.register(MiscUtil.identifier("routing_pipe"), ClassicPipes.ROUTING_PIPE_MENU);
-                helper.register(MiscUtil.identifier("provider_pipe"), ClassicPipes.PROVIDER_PIPE_MENU);
-                helper.register(MiscUtil.identifier("request"), ClassicPipes.REQUEST_MENU);
-                helper.register(MiscUtil.identifier("stocking_pipe"), ClassicPipes.STOCKING_PIPE_MENU);
-                helper.register(MiscUtil.identifier("matching_pipe"), ClassicPipes.MATCHING_PIPE_MENU);
-                helper.register(MiscUtil.identifier("storage_pipe"), ClassicPipes.STORAGE_PIPE_MENU);
-                helper.register(MiscUtil.identifier("recipe_pipe"), ClassicPipes.RECIPE_PIPE_MENU);
-                helper.register(MiscUtil.identifier("diamond_fluid_pipe"), ClassicPipes.DIAMOND_FLUID_PIPE_MENU);
-                helper.register(MiscUtil.identifier("advanced_copper_pipe"), ClassicPipes.ADVANCED_COPPER_PIPE_MENU);
-                helper.register(MiscUtil.identifier("advanced_copper_fluid_pipe"), ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_MENU);
+                ClassicPipes.MENUS.forEach((name, menu) ->
+                        helper.register(MiscUtil.identifier(name), menu)
+                );
             });
 
         }
