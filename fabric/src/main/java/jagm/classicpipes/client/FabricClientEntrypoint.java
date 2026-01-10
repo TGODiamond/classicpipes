@@ -20,31 +20,14 @@ public class FabricClientEntrypoint implements ClientModInitializer {
     public void onInitializeClient() {
 
         ClassicPipes.TRANSPARENT_BLOCKS.forEach(block -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT));
-
-        BlockEntityRenderers.register(ClassicPipes.BASIC_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.GOLDEN_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.COPPER_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.IRON_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.DIAMOND_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.FLINT_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.LAPIS_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.OBSIDIAN_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.BONE_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.ROUTING_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.PROVIDER_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.REQUEST_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.STOCKING_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.MATCHING_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.STORAGE_PIPE_ENTITY, PipeRenderer::new);
+        ClassicPipes.ITEM_PIPE_ENTITIES.forEach((name, entityType) ->
+                BlockEntityRenderers.register(entityType, PipeRenderer::new)
+        );
+        ClassicPipes.FLUID_PIPE_ENTITIES.forEach((name, entityType) ->
+                BlockEntityRenderers.register(entityType, FluidPipeRenderer::new)
+        );
+        // Uses a special renderer
         BlockEntityRenderers.register(ClassicPipes.RECIPE_PIPE_ENTITY, RecipePipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.ADVANCED_COPPER_PIPE_ENTITY, PipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.COPPER_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.IRON_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.LAPIS_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.DIAMOND_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.OBSIDIAN_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-        BlockEntityRenderers.register(ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
 
         MenuScreens.register(ClassicPipes.DIAMOND_PIPE_MENU, DiamondPipeScreen::new);
         MenuScreens.register(ClassicPipes.ROUTING_PIPE_MENU, RoutingPipeScreen::new);

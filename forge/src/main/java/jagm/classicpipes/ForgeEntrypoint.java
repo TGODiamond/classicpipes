@@ -54,30 +54,7 @@ public class ForgeEntrypoint {
             event.register(Registries.CUSTOM_STAT, helper -> helper.register(ClassicPipes.ITEMS_REQUESTED_STAT, ClassicPipes.ITEMS_REQUESTED_STAT));
 
             event.register(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, helper -> {
-                helper.register("basic_pipe", ClassicPipes.BASIC_PIPE_ENTITY);
-                helper.register("golden_pipe", ClassicPipes.GOLDEN_PIPE_ENTITY);
-                helper.register("copper_pipe", ClassicPipes.COPPER_PIPE_ENTITY);
-                helper.register("iron_pipe", ClassicPipes.IRON_PIPE_ENTITY);
-                helper.register("diamond_pipe", ClassicPipes.DIAMOND_PIPE_ENTITY);
-                helper.register("flint_pipe", ClassicPipes.FLINT_PIPE_ENTITY);
-                helper.register("lapis_pipe", ClassicPipes.LAPIS_PIPE_ENTITY);
-                helper.register("obsidian_pipe", ClassicPipes.OBSIDIAN_PIPE_ENTITY);
-                helper.register("bone_pipe", ClassicPipes.BONE_PIPE_ENTITY);
-                helper.register("routing_pipe", ClassicPipes.ROUTING_PIPE_ENTITY);
-                helper.register("provider_pipe", ClassicPipes.PROVIDER_PIPE_ENTITY);
-                helper.register("request_pipe", ClassicPipes.REQUEST_PIPE_ENTITY);
-                helper.register("stocking_pipe", ClassicPipes.STOCKING_PIPE_ENTITY);
-                helper.register("matching_pipe", ClassicPipes.MATCHING_PIPE_ENTITY);
-                helper.register("storage_pipe", ClassicPipes.STORAGE_PIPE_ENTITY);
-                helper.register("recipe_pipe", ClassicPipes.RECIPE_PIPE_ENTITY);
-                helper.register("fluid_pipe", ClassicPipes.FLUID_PIPE_ENTITY);
-                helper.register("copper_fluid_pipe", ClassicPipes.COPPER_FLUID_PIPE_ENTITY);
-                helper.register("iron_fluid_pipe", ClassicPipes.IRON_FLUID_PIPE_ENTITY);
-                helper.register("lapis_fluid_pipe", ClassicPipes.LAPIS_FLUID_PIPE_ENTITY);
-                helper.register("diamond_fluid_pipe", ClassicPipes.DIAMOND_FLUID_PIPE_ENTITY);
-                helper.register("obsidian_fluid_pipe", ClassicPipes.OBSIDIAN_FLUID_PIPE_ENTITY);
-                helper.register("advanced_copper_pipe", ClassicPipes.ADVANCED_COPPER_PIPE_ENTITY);
-                helper.register("advanced_copper_fluid_pipe", ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_ENTITY);
+                ClassicPipes.BlOCK_ENTITIES.forEach(helper::register);
             });
 
             event.register(ForgeRegistries.Keys.MENU_TYPES, helper -> {
@@ -193,30 +170,14 @@ public class ForgeEntrypoint {
 
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            event.registerBlockEntityRenderer(ClassicPipes.BASIC_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.GOLDEN_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.COPPER_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.IRON_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.DIAMOND_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.FLINT_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.LAPIS_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.OBSIDIAN_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.BONE_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.ROUTING_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.PROVIDER_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.REQUEST_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.STOCKING_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.MATCHING_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.STORAGE_PIPE_ENTITY, PipeRenderer::new);
+            ClassicPipes.ITEM_PIPE_ENTITIES.forEach((name, entityType) ->
+                    event.registerBlockEntityRenderer(entityType, PipeRenderer::new)
+            );
+            ClassicPipes.FLUID_PIPE_ENTITIES.forEach((name, entityType) ->
+                    event.registerBlockEntityRenderer(entityType, FluidPipeRenderer::new)
+            );
+            // Uses a special renderer
             event.registerBlockEntityRenderer(ClassicPipes.RECIPE_PIPE_ENTITY, RecipePipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.COPPER_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.IRON_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.LAPIS_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.DIAMOND_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.OBSIDIAN_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.ADVANCED_COPPER_PIPE_ENTITY, PipeRenderer::new);
-            event.registerBlockEntityRenderer(ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_ENTITY, FluidPipeRenderer::new);
         }
 
         @SubscribeEvent

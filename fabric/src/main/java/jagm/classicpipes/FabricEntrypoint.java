@@ -38,55 +38,16 @@ public class FabricEntrypoint implements ModInitializer {
         Registry.register(BuiltInRegistries.CUSTOM_STAT, ClassicPipes.ITEMS_REQUESTED_STAT, ClassicPipes.ITEMS_REQUESTED_STAT);
         ClassicPipes.createStats();
 
-        registerBlockEntity("basic_pipe", ClassicPipes.BASIC_PIPE_ENTITY);
-        registerBlockEntity("golden_pipe", ClassicPipes.GOLDEN_PIPE_ENTITY);
-        registerBlockEntity("copper_pipe", ClassicPipes.COPPER_PIPE_ENTITY);
-        registerBlockEntity("iron_pipe", ClassicPipes.IRON_PIPE_ENTITY);
-        registerBlockEntity("diamond_pipe", ClassicPipes.DIAMOND_PIPE_ENTITY);
-        registerBlockEntity("flint_pipe", ClassicPipes.FLINT_PIPE_ENTITY);
-        registerBlockEntity("lapis_pipe", ClassicPipes.LAPIS_PIPE_ENTITY);
-        registerBlockEntity("obsidian_pipe", ClassicPipes.OBSIDIAN_PIPE_ENTITY);
-        registerBlockEntity("bone_pipe", ClassicPipes.BONE_PIPE_ENTITY);
-        registerBlockEntity("routing_pipe", ClassicPipes.ROUTING_PIPE_ENTITY);
-        registerBlockEntity("provider_pipe", ClassicPipes.PROVIDER_PIPE_ENTITY);
-        registerBlockEntity("request_pipe", ClassicPipes.REQUEST_PIPE_ENTITY);
-        registerBlockEntity("stocking_pipe", ClassicPipes.STOCKING_PIPE_ENTITY);
-        registerBlockEntity("matching_pipe", ClassicPipes.MATCHING_PIPE_ENTITY);
-        registerBlockEntity("storage_pipe", ClassicPipes.STORAGE_PIPE_ENTITY);
-        registerBlockEntity("recipe_pipe", ClassicPipes.RECIPE_PIPE_ENTITY);
-        registerBlockEntity("fluid_pipe", ClassicPipes.FLUID_PIPE_ENTITY);
-        registerBlockEntity("copper_fluid_pipe", ClassicPipes.COPPER_FLUID_PIPE_ENTITY);
-        registerBlockEntity("iron_fluid_pipe", ClassicPipes.IRON_FLUID_PIPE_ENTITY);
-        registerBlockEntity("lapis_fluid_pipe", ClassicPipes.LAPIS_FLUID_PIPE_ENTITY);
-        registerBlockEntity("diamond_fluid_pipe", ClassicPipes.DIAMOND_FLUID_PIPE_ENTITY);
-        registerBlockEntity("obsidian_fluid_pipe", ClassicPipes.OBSIDIAN_FLUID_PIPE_ENTITY);
-        registerBlockEntity("advanced_copper_pipe", ClassicPipes.ADVANCED_COPPER_PIPE_ENTITY);
-        registerBlockEntity("advanced_copper_fluid_pipe", ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_ENTITY);
+        ClassicPipes.BlOCK_ENTITIES.forEach(FabricEntrypoint::registerBlockEntity);
 
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.BASIC_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.GOLDEN_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.COPPER_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.IRON_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.DIAMOND_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.FLINT_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.LAPIS_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.OBSIDIAN_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.BONE_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.ROUTING_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.PROVIDER_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.REQUEST_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.STOCKING_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.MATCHING_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.STORAGE_PIPE_ENTITY);
+        ClassicPipes.ITEM_PIPE_ENTITIES.forEach((name, entityType) ->
+                ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, entityType)
+        );
+        ClassicPipes.FLUID_PIPE_ENTITIES.forEach((name, entityType) ->
+                FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, entityType)
+        );
+        // Pipe(s) with a unique renderer
         ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.RECIPE_PIPE_ENTITY);
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.ADVANCED_COPPER_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.FLUID_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.COPPER_FLUID_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.IRON_FLUID_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.LAPIS_FLUID_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.DIAMOND_FLUID_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.OBSIDIAN_FLUID_PIPE_ENTITY);
-        FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, ClassicPipes.ADVANCED_COPPER_FLUID_PIPE_ENTITY);
 
         registerMenu("diamond_pipe", ClassicPipes.DIAMOND_PIPE_MENU);
         registerMenu("routing_pipe", ClassicPipes.ROUTING_PIPE_MENU);
