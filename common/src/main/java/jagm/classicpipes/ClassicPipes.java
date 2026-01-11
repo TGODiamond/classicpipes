@@ -3,6 +3,9 @@ package jagm.classicpipes;
 import com.mojang.serialization.Codec;
 import jagm.classicpipes.block.*;
 import jagm.classicpipes.blockentity.*;
+import jagm.classicpipes.client.renderer.FluidPipeRenderer;
+import jagm.classicpipes.client.renderer.PipeRenderer;
+import jagm.classicpipes.client.renderer.RecipePipeRenderer;
 import jagm.classicpipes.inventory.menu.*;
 import jagm.classicpipes.item.ModLabelItem;
 import jagm.classicpipes.item.TagLabelItem;
@@ -11,6 +14,9 @@ import jagm.classicpipes.services.Services;
 import jagm.classicpipes.util.MiscUtil;
 import jagm.classicpipes.util.RequestItemTrigger;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.state.BlockEntityRenderState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -59,14 +65,25 @@ public final class ClassicPipes {
 
     public static final Map<String, Item> ITEMS = new LinkedHashMap<>();
     public static final Map<String, Block> BLOCKS = new LinkedHashMap<>();
-    public static final Map<String, BlockEntityType<? extends ItemPipeEntity>> ITEM_PIPE_ENTITIES = new HashMap<>();
-    public static final Map<String, BlockEntityType<? extends FluidPipeEntity>> FLUID_PIPE_ENTITIES = new HashMap<>();
-    public static final Map<String, BlockEntityType<? extends BlockEntity>> BlOCK_ENTITIES = new HashMap<>();
+    public static final Map<String, BlockEntry<? extends BlockEntity, ? extends BlockEntityRenderState>> BlOCK_ENTITIES = new HashMap<>();
     public static final Map<String, MenuType<? extends AbstractContainerMenu>> MENUS = new HashMap<>();
 
     public static final Map<String, SoundEvent> SOUNDS = new LinkedHashMap<>();
 
     public static final List<Block> TRANSPARENT_BLOCKS = new ArrayList<>();
+
+
+    public enum PipeType {
+        ITEM,
+        FLUID
+    }
+
+    public record BlockEntry<E extends BlockEntity, R extends BlockEntityRenderState>(
+            BlockEntityType<E> blockEntityType,
+            Function<BlockEntityRendererProvider.Context, BlockEntityRenderer<E, R>> rendererFactory,
+            PipeType pipeType
+    ) {}
+
 
     public static final Block OAK_PIPE = createWoodenPipe("oak_pipe", MapColor.WOOD);
     public static final Block SPRUCE_PIPE = createWoodenPipe("spruce_pipe", MapColor.PODZOL);
@@ -117,31 +134,30 @@ public final class ClassicPipes {
     public static final Block BRICK_FLUID_PIPE = createPipe("brick_fluid_pipe", BrickFluidPipeBlock::new, SoundType.DECORATED_POT, MapColor.COLOR_RED, 0.25F, translateDesc("brick_fluid_pipe"));
     public static final Block OBSIDIAN_FLUID_PIPE = createPipe("obsidian_fluid_pipe", ObsidianFluidPipeBlock::new, SoundType.DECORATED_POT, MapColor.COLOR_BLACK, 0.25F, translateDesc("obsidian_fluid_pipe"));
 
-    public static final BlockEntityType<RoundRobinPipeEntity> BASIC_PIPE_ENTITY = createItemPipeEntityType("basic_pipe", RoundRobinPipeEntity::new, OAK_PIPE, SPRUCE_PIPE, BIRCH_PIPE, JUNGLE_PIPE, ACACIA_PIPE, DARK_OAK_PIPE, MANGROVE_PIPE, CHERRY_PIPE, PALE_OAK_PIPE, BAMBOO_PIPE, CRIMSON_PIPE, WARPED_PIPE, BRICK_PIPE);
-    public static final BlockEntityType<GoldenPipeEntity> GOLDEN_PIPE_ENTITY = createItemPipeEntityType("golden_pipe", GoldenPipeEntity::new, GOLDEN_PIPE);
-    public static final BlockEntityType<CopperPipeEntity> COPPER_PIPE_ENTITY = createItemPipeEntityType("copper_pipe", CopperPipeEntity::new, COPPER_PIPE);
-    public static final BlockEntityType<AdvancedCopperPipeEntity> ADVANCED_COPPER_PIPE_ENTITY = createItemPipeEntityType("advanced_copper_pipe", AdvancedCopperPipeEntity::new, ADVANCED_COPPER_PIPE);
-    public static final BlockEntityType<IronPipeEntity> IRON_PIPE_ENTITY = createItemPipeEntityType("iron_pipe", IronPipeEntity::new, IRON_PIPE);
-    public static final BlockEntityType<DiamondPipeEntity> DIAMOND_PIPE_ENTITY = createItemPipeEntityType("diamond_pipe", DiamondPipeEntity::new, DIAMOND_PIPE);
-    public static final BlockEntityType<FlintPipeEntity> FLINT_PIPE_ENTITY = createItemPipeEntityType("flint_pipe", FlintPipeEntity::new, FLINT_PIPE);
-    public static final BlockEntityType<LapisPipeEntity> LAPIS_PIPE_ENTITY = createItemPipeEntityType("lapis_pipe", LapisPipeEntity::new, LAPIS_PIPE);
-    public static final BlockEntityType<ObsidianPipeEntity> OBSIDIAN_PIPE_ENTITY = createItemPipeEntityType("obsidian_pipe", ObsidianPipeEntity::new, OBSIDIAN_PIPE);
-    public static final BlockEntityType<BonePipeEntity> BONE_PIPE_ENTITY = createItemPipeEntityType("bone_pipe", BonePipeEntity::new, BONE_PIPE);
-    public static final BlockEntityType<RoutingPipeEntity> ROUTING_PIPE_ENTITY = createItemPipeEntityType("routing_pipe", RoutingPipeEntity::new, ROUTING_PIPE);
-    public static final BlockEntityType<ProviderPipeEntity> PROVIDER_PIPE_ENTITY = createItemPipeEntityType("provider_pipe", ProviderPipeEntity::new, PROVIDER_PIPE);
-    public static final BlockEntityType<RequestPipeEntity> REQUEST_PIPE_ENTITY = createItemPipeEntityType("request_pipe", RequestPipeEntity::new, REQUEST_PIPE);
-    public static final BlockEntityType<StockingPipeEntity> STOCKING_PIPE_ENTITY = createItemPipeEntityType("stocking_pipe", StockingPipeEntity::new, STOCKING_PIPE);
-    public static final BlockEntityType<MatchingPipeEntity> MATCHING_PIPE_ENTITY = createItemPipeEntityType("matching_pipe", MatchingPipeEntity::new, MATCHING_PIPE);
-    public static final BlockEntityType<StoragePipeEntity> STORAGE_PIPE_ENTITY = createItemPipeEntityType("storage_pipe", StoragePipeEntity::new, STORAGE_PIPE);
-    // RecipePipeEntity has a unique renderer, so don't add it to ITEM_PIPE_ENTITIES
-    public static final BlockEntityType<RecipePipeEntity> RECIPE_PIPE_ENTITY = createBlockEntityType("recipe_pipe", RecipePipeEntity::new, RECIPE_PIPE);
-    public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = createFluidPipeEntityType("fluid_pipe", FluidPipeEntity::new, OAK_FLUID_PIPE, SPRUCE_FLUID_PIPE, BIRCH_FLUID_PIPE, JUNGLE_FLUID_PIPE, ACACIA_FLUID_PIPE, DARK_OAK_FLUID_PIPE, MANGROVE_FLUID_PIPE, CHERRY_FLUID_PIPE, PALE_OAK_FLUID_PIPE, BAMBOO_FLUID_PIPE, CRIMSON_FLUID_PIPE, WARPED_FLUID_PIPE, BRICK_FLUID_PIPE);
-    public static final BlockEntityType<CopperFluidPipeEntity> COPPER_FLUID_PIPE_ENTITY = createFluidPipeEntityType("copper_fluid_pipe", CopperFluidPipeEntity::new, COPPER_FLUID_PIPE);
-    public static final BlockEntityType<AdvancedCopperFluidPipeEntity> ADVANCED_COPPER_FLUID_PIPE_ENTITY = createFluidPipeEntityType("advanced_copper_fluid_pipe", AdvancedCopperFluidPipeEntity::new, ADVANCED_COPPER_FLUID_PIPE);
-    public static final BlockEntityType<IronFluidPipeEntity> IRON_FLUID_PIPE_ENTITY = createFluidPipeEntityType("iron_fluid_pipe", IronFluidPipeEntity::new, IRON_FLUID_PIPE);
-    public static final BlockEntityType<LapisFluidPipeEntity> LAPIS_FLUID_PIPE_ENTITY = createFluidPipeEntityType("lapis_fluid_pipe", LapisFluidPipeEntity::new, LAPIS_FLUID_PIPE);
-    public static final BlockEntityType<DiamondFluidPipeEntity> DIAMOND_FLUID_PIPE_ENTITY = createFluidPipeEntityType("diamond_fluid_pipe", DiamondFluidPipeEntity::new, DIAMOND_FLUID_PIPE);
-    public static final BlockEntityType<ObsidianFluidPipeEntity> OBSIDIAN_FLUID_PIPE_ENTITY = createFluidPipeEntityType("obsidian_fluid_pipe", ObsidianFluidPipeEntity::new, OBSIDIAN_FLUID_PIPE);
+    public static final BlockEntityType<RoundRobinPipeEntity> BASIC_PIPE_ENTITY = createItemPipeEntityType("basic_pipe", RoundRobinPipeEntity::new, PipeRenderer::new, OAK_PIPE, SPRUCE_PIPE, BIRCH_PIPE, JUNGLE_PIPE, ACACIA_PIPE, DARK_OAK_PIPE, MANGROVE_PIPE, CHERRY_PIPE, PALE_OAK_PIPE, BAMBOO_PIPE, CRIMSON_PIPE, WARPED_PIPE, BRICK_PIPE);
+    public static final BlockEntityType<GoldenPipeEntity> GOLDEN_PIPE_ENTITY = createItemPipeEntityType("golden_pipe", GoldenPipeEntity::new, PipeRenderer::new, GOLDEN_PIPE);
+    public static final BlockEntityType<CopperPipeEntity> COPPER_PIPE_ENTITY = createItemPipeEntityType("copper_pipe", CopperPipeEntity::new, PipeRenderer::new, COPPER_PIPE);
+    public static final BlockEntityType<AdvancedCopperPipeEntity> ADVANCED_COPPER_PIPE_ENTITY = createItemPipeEntityType("advanced_copper_pipe", AdvancedCopperPipeEntity::new, PipeRenderer::new, ADVANCED_COPPER_PIPE);
+    public static final BlockEntityType<IronPipeEntity> IRON_PIPE_ENTITY = createItemPipeEntityType("iron_pipe", IronPipeEntity::new, PipeRenderer::new, IRON_PIPE);
+    public static final BlockEntityType<DiamondPipeEntity> DIAMOND_PIPE_ENTITY = createItemPipeEntityType("diamond_pipe", DiamondPipeEntity::new, PipeRenderer::new, DIAMOND_PIPE);
+    public static final BlockEntityType<FlintPipeEntity> FLINT_PIPE_ENTITY = createItemPipeEntityType("flint_pipe", FlintPipeEntity::new, PipeRenderer::new, FLINT_PIPE);
+    public static final BlockEntityType<LapisPipeEntity> LAPIS_PIPE_ENTITY = createItemPipeEntityType("lapis_pipe", LapisPipeEntity::new, PipeRenderer::new, LAPIS_PIPE);
+    public static final BlockEntityType<ObsidianPipeEntity> OBSIDIAN_PIPE_ENTITY = createItemPipeEntityType("obsidian_pipe", ObsidianPipeEntity::new, PipeRenderer::new, OBSIDIAN_PIPE);
+    public static final BlockEntityType<BonePipeEntity> BONE_PIPE_ENTITY = createItemPipeEntityType("bone_pipe", BonePipeEntity::new, PipeRenderer::new, BONE_PIPE);
+    public static final BlockEntityType<RoutingPipeEntity> ROUTING_PIPE_ENTITY = createItemPipeEntityType("routing_pipe", RoutingPipeEntity::new, PipeRenderer::new, ROUTING_PIPE);
+    public static final BlockEntityType<ProviderPipeEntity> PROVIDER_PIPE_ENTITY = createItemPipeEntityType("provider_pipe", ProviderPipeEntity::new, PipeRenderer::new, PROVIDER_PIPE);
+    public static final BlockEntityType<RequestPipeEntity> REQUEST_PIPE_ENTITY = createItemPipeEntityType("request_pipe", RequestPipeEntity::new, PipeRenderer::new, REQUEST_PIPE);
+    public static final BlockEntityType<StockingPipeEntity> STOCKING_PIPE_ENTITY = createItemPipeEntityType("stocking_pipe", StockingPipeEntity::new, PipeRenderer::new, STOCKING_PIPE);
+    public static final BlockEntityType<MatchingPipeEntity> MATCHING_PIPE_ENTITY = createItemPipeEntityType("matching_pipe", MatchingPipeEntity::new, PipeRenderer::new, MATCHING_PIPE);
+    public static final BlockEntityType<StoragePipeEntity> STORAGE_PIPE_ENTITY = createItemPipeEntityType("storage_pipe", StoragePipeEntity::new, PipeRenderer::new, STORAGE_PIPE);
+    public static final BlockEntityType<RecipePipeEntity> RECIPE_PIPE_ENTITY = createItemPipeEntityType("recipe_pipe", RecipePipeEntity::new, RecipePipeRenderer::new, RECIPE_PIPE);
+    public static final BlockEntityType<FluidPipeEntity> FLUID_PIPE_ENTITY = createFluidPipeEntityType("fluid_pipe", FluidPipeEntity::new, FluidPipeRenderer::new, OAK_FLUID_PIPE, SPRUCE_FLUID_PIPE, BIRCH_FLUID_PIPE, JUNGLE_FLUID_PIPE, ACACIA_FLUID_PIPE, DARK_OAK_FLUID_PIPE, MANGROVE_FLUID_PIPE, CHERRY_FLUID_PIPE, PALE_OAK_FLUID_PIPE, BAMBOO_FLUID_PIPE, CRIMSON_FLUID_PIPE, WARPED_FLUID_PIPE, BRICK_FLUID_PIPE);
+    public static final BlockEntityType<CopperFluidPipeEntity> COPPER_FLUID_PIPE_ENTITY = createFluidPipeEntityType("copper_fluid_pipe", CopperFluidPipeEntity::new, FluidPipeRenderer::new, COPPER_FLUID_PIPE);
+    public static final BlockEntityType<AdvancedCopperFluidPipeEntity> ADVANCED_COPPER_FLUID_PIPE_ENTITY = createFluidPipeEntityType("advanced_copper_fluid_pipe", AdvancedCopperFluidPipeEntity::new, FluidPipeRenderer::new, ADVANCED_COPPER_FLUID_PIPE);
+    public static final BlockEntityType<IronFluidPipeEntity> IRON_FLUID_PIPE_ENTITY = createFluidPipeEntityType("iron_fluid_pipe", IronFluidPipeEntity::new, FluidPipeRenderer::new, IRON_FLUID_PIPE);
+    public static final BlockEntityType<LapisFluidPipeEntity> LAPIS_FLUID_PIPE_ENTITY = createFluidPipeEntityType("lapis_fluid_pipe", LapisFluidPipeEntity::new, FluidPipeRenderer::new, LAPIS_FLUID_PIPE);
+    public static final BlockEntityType<DiamondFluidPipeEntity> DIAMOND_FLUID_PIPE_ENTITY = createFluidPipeEntityType("diamond_fluid_pipe", DiamondFluidPipeEntity::new, FluidPipeRenderer::new, DIAMOND_FLUID_PIPE);
+    public static final BlockEntityType<ObsidianFluidPipeEntity> OBSIDIAN_FLUID_PIPE_ENTITY = createFluidPipeEntityType("obsidian_fluid_pipe", ObsidianFluidPipeEntity::new, FluidPipeRenderer::new, OBSIDIAN_FLUID_PIPE);
 
     public static final Item PIPE_SLICER = createItem("pipe_slicer", Item::new, 1, false, translateDesc("pipe_slicer"));
     public static final Item TAG_LABEL = createItem("tag_label", TagLabelItem::new, 1, false);
@@ -177,19 +193,24 @@ public final class ClassicPipes {
 
     public static final Identifier ITEMS_REQUESTED_STAT = MiscUtil.identifier("items_requested");
 
-    private static <T extends BlockEntity> BlockEntityType<T> createBlockEntityType(String name, BiFunction<BlockPos, BlockState, T> factory, Block... blocks) {
-        BlockEntityType<T> entityType = Services.LOADER_SERVICE.createBlockEntityType(factory, blocks);
-        BlOCK_ENTITIES.put(name, entityType);
+    private static <E extends ItemPipeEntity, R extends PipeRenderer.PipeRenderState> BlockEntityType<E> createItemPipeEntityType(
+            String name,
+            BiFunction<BlockPos, BlockState, E> blockFunction,
+            Function<BlockEntityRendererProvider.Context, BlockEntityRenderer<E, R>> rendererFunction,
+            Block... blocks
+    ) {
+        BlockEntityType<E> entityType = Services.LOADER_SERVICE.createBlockEntityType(blockFunction, blocks);
+        BlOCK_ENTITIES.put(name, new BlockEntry<>(entityType, rendererFunction, PipeType.ITEM));
         return entityType;
     }
-    private static <T extends ItemPipeEntity> BlockEntityType<T> createItemPipeEntityType(String name, BiFunction<BlockPos, BlockState, T> factory, Block... blocks) {
-        BlockEntityType<T> entityType = createBlockEntityType(name, factory, blocks);
-        ITEM_PIPE_ENTITIES.put(name, entityType);
-        return entityType;
-    }
-    private static <T extends FluidPipeEntity> BlockEntityType<T> createFluidPipeEntityType(String name, BiFunction<BlockPos, BlockState, T> factory, Block... blocks) {
-        BlockEntityType<T> entityType = createBlockEntityType(name, factory, blocks);
-        FLUID_PIPE_ENTITIES.put(name, entityType);
+    private static <E extends FluidPipeEntity, R extends FluidPipeRenderer.FluidPipeRenderState> BlockEntityType<E> createFluidPipeEntityType(
+            String name,
+            BiFunction<BlockPos, BlockState, E> blockFunction,
+            Function<BlockEntityRendererProvider.Context, BlockEntityRenderer<E, R>> rendererFunction,
+            Block... blocks
+    ) {
+        BlockEntityType<E> entityType = Services.LOADER_SERVICE.createBlockEntityType(blockFunction, blocks);
+        BlOCK_ENTITIES.put(name, new BlockEntry<>(entityType, rendererFunction, PipeType.FLUID));
         return entityType;
     }
 

@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import jagm.classicpipes.block.FluidPipeBlock;
 import jagm.classicpipes.blockentity.FluidPipeEntity;
+import jagm.classicpipes.blockentity.ItemPipeEntity;
 import jagm.classicpipes.services.Services;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
@@ -21,7 +22,7 @@ import org.joml.Matrix4f;
 
 import java.util.Arrays;
 
-public class FluidPipeRenderer implements BlockEntityRenderer<FluidPipeEntity, FluidPipeRenderer.FluidPipeRenderState> {
+public class FluidPipeRenderer<T extends FluidPipeEntity> implements BlockEntityRenderer<T, FluidPipeRenderer.FluidPipeRenderState> {
 
     private final BlockEntityRendererProvider.Context context;
 
@@ -35,7 +36,7 @@ public class FluidPipeRenderer implements BlockEntityRenderer<FluidPipeEntity, F
     }
 
     @Override
-    public void extractRenderState(FluidPipeEntity pipe, FluidPipeRenderState pipeState, float partialTicks, Vec3 cameraPos, ModelFeatureRenderer.CrumblingOverlay breakProgress) {
+    public void extractRenderState(T pipe, FluidPipeRenderState pipeState, float partialTicks, Vec3 cameraPos, ModelFeatureRenderer.CrumblingOverlay breakProgress) {
         BlockEntityRenderer.super.extractRenderState(pipe, pipeState, partialTicks, cameraPos, breakProgress);
         FluidRenderInfo fluidInfo = Services.LOADER_SERVICE.getFluidRenderInfo(pipe.getFluid().defaultFluidState(), pipe.getLevel(), pipe.getBlockPos());
         boolean[] pipeDirections = new boolean[6];

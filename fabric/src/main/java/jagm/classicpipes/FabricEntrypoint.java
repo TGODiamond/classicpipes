@@ -48,16 +48,9 @@ public final class FabricEntrypoint implements ModInitializer, ClientModInitiali
         Registry.register(BuiltInRegistries.CUSTOM_STAT, ClassicPipes.ITEMS_REQUESTED_STAT, ClassicPipes.ITEMS_REQUESTED_STAT);
         ClassicPipes.createStats();
 
-        ClassicPipes.BlOCK_ENTITIES.forEach(FabricEntrypoint::registerBlockEntity);
-
-        ClassicPipes.ITEM_PIPE_ENTITIES.forEach((name, entityType) ->
-                ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, entityType)
+        ClassicPipes.BlOCK_ENTITIES.forEach((name, blockEntry) ->
+                ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, blockEntry.blockEntityType())
         );
-        ClassicPipes.FLUID_PIPE_ENTITIES.forEach((name, entityType) ->
-                FluidStorage.SIDED.registerForBlockEntity(FabricFluidPipeWrapper::new, entityType)
-        );
-        // Pipe(s) with a unique renderer
-        ItemStorage.SIDED.registerForBlockEntity(FabricItemPipeWrapper::new, ClassicPipes.RECIPE_PIPE_ENTITY);
 
         ClassicPipes.MENUS.forEach(FabricEntrypoint::registerMenu);
 

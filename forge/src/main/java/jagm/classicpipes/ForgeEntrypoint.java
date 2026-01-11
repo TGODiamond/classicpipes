@@ -54,7 +54,9 @@ public final class ForgeEntrypoint {
             event.register(Registries.CUSTOM_STAT, helper -> helper.register(ClassicPipes.ITEMS_REQUESTED_STAT, ClassicPipes.ITEMS_REQUESTED_STAT));
 
             event.register(ForgeRegistries.Keys.BLOCK_ENTITY_TYPES, helper ->
-                ClassicPipes.BlOCK_ENTITIES.forEach(helper::register)
+                ClassicPipes.BlOCK_ENTITIES.forEach((name, blockEntry) ->
+                        helper.register(name, blockEntry.blockEntityType())
+                )
             );
 
             event.register(ForgeRegistries.Keys.MENU_TYPES, helper ->
@@ -160,14 +162,9 @@ public final class ForgeEntrypoint {
 
         @SubscribeEvent
         public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-            ClassicPipes.ITEM_PIPE_ENTITIES.forEach((name, entityType) ->
-                    event.registerBlockEntityRenderer(entityType, PipeRenderer::new)
+            ClassicPipes.BlOCK_ENTITIES.forEach((name, blockEntry) ->
+                event.registerBlockEntityRenderer(blockEntry.blockEntityType(), blockEntry.rendererFactory())
             );
-            ClassicPipes.FLUID_PIPE_ENTITIES.forEach((name, entityType) ->
-                    event.registerBlockEntityRenderer(entityType, FluidPipeRenderer::new)
-            );
-            // Uses a special renderer
-            event.registerBlockEntityRenderer(ClassicPipes.RECIPE_PIPE_ENTITY, RecipePipeRenderer::new);
         }
 
         @SubscribeEvent
