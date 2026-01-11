@@ -11,7 +11,7 @@ import net.minecraft.world.ItemStackWithSlot;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ClientBoundRecipePipePayload(List<ItemStackWithSlot> items, Direction[] slotDirections, List<Direction> availableDirections, BlockPos pos, boolean blockingMode) {
+public record ClientBoundRecipePipePayload(List<ItemStackWithSlot> items, Direction[] slotDirections, List<Direction> availableDirections, BlockPos pos, boolean blockingMode) implements PayloadCodec<ClientBoundRecipePipePayload> {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientBoundRecipePipePayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.collection(ArrayList::new, MiscUtil.ITEM_STACK_WITH_SLOT_STREAM_CODEC),
@@ -43,4 +43,8 @@ public record ClientBoundRecipePipePayload(List<ItemStackWithSlot> items, Direct
         return new ClientBoundRecipePipePayload(items, directions, availableDirections, pos, blockingMode);
     }
 
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ClientBoundRecipePipePayload> getPayloadCodec() {
+        return STREAM_CODEC;
+    }
 }

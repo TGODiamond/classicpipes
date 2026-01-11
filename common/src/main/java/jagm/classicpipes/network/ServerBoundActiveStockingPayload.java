@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundActiveStockingPayload(boolean activeStocking) implements SelfHandler {
+public record ServerBoundActiveStockingPayload(boolean activeStocking) implements PayloadCodec<ServerBoundActiveStockingPayload>, SelfHandler {
 
     public static final Type<ServerBoundActiveStockingPayload> TYPE = new Type<>(MiscUtil.identifier("active_stocking"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundActiveStockingPayload> STREAM_CODEC = StreamCodec.composite(
@@ -27,6 +27,11 @@ public record ServerBoundActiveStockingPayload(boolean activeStocking) implement
         if (player != null && player.containerMenu instanceof StockingPipeMenu menu) {
             menu.setActiveStocking(this.activeStocking());
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundActiveStockingPayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

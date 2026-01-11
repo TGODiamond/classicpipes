@@ -8,7 +8,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundBlockingModePayload(boolean blockingMode) implements SelfHandler {
+public record ServerBoundBlockingModePayload(boolean blockingMode) implements PayloadCodec<ServerBoundBlockingModePayload>, SelfHandler {
 
     public static final Type<ServerBoundBlockingModePayload> TYPE = new Type<>(MiscUtil.identifier("blocking_mode"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundBlockingModePayload> STREAM_CODEC = StreamCodec.composite(
@@ -29,6 +29,11 @@ public record ServerBoundBlockingModePayload(boolean blockingMode) implements Se
                 menu.setBlockingMode(this.blockingMode());
             }
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundBlockingModePayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

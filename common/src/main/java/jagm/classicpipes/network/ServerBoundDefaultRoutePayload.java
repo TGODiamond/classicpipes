@@ -9,7 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundDefaultRoutePayload(boolean defaultRoute) implements SelfHandler {
+public record ServerBoundDefaultRoutePayload(boolean defaultRoute) implements PayloadCodec<ServerBoundDefaultRoutePayload>, SelfHandler {
 
     public static final Type<ServerBoundDefaultRoutePayload> TYPE = new Type<>(MiscUtil.identifier("default_route"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundDefaultRoutePayload> STREAM_CODEC = StreamCodec.composite(
@@ -32,6 +32,11 @@ public record ServerBoundDefaultRoutePayload(boolean defaultRoute) implements Se
                 menu.setDefaultRoute(this.defaultRoute());
             }
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundDefaultRoutePayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

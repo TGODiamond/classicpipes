@@ -13,7 +13,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
-public record ServerBoundSetFilterPayload(int slot, ItemStack stack) implements SelfHandler {
+public record ServerBoundSetFilterPayload(int slot, ItemStack stack) implements PayloadCodec<ServerBoundSetFilterPayload>, SelfHandler {
 
     public static final Type<ServerBoundSetFilterPayload> TYPE = new Type<>(MiscUtil.identifier("set_filter"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundSetFilterPayload> STREAM_CODEC = StreamCodec.composite(
@@ -38,6 +38,12 @@ public record ServerBoundSetFilterPayload(int slot, ItemStack stack) implements 
                 slot.setChanged();
             }
         }
+    }
+
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundSetFilterPayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

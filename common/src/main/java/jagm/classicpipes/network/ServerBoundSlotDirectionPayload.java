@@ -10,7 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundSlotDirectionPayload(BlockPos pos, int slot, Direction direction) implements SelfHandler {
+public record ServerBoundSlotDirectionPayload(BlockPos pos, int slot, Direction direction) implements PayloadCodec<ServerBoundSlotDirectionPayload>, SelfHandler {
 
     public static final CustomPacketPayload.Type<ServerBoundSlotDirectionPayload> TYPE = new CustomPacketPayload.Type<>(MiscUtil.identifier("slot_direction"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundSlotDirectionPayload> STREAM_CODEC = StreamCodec.composite(
@@ -33,6 +33,11 @@ public record ServerBoundSlotDirectionPayload(BlockPos pos, int slot, Direction 
         if (player.level().getBlockEntity(this.pos()) instanceof RecipePipeEntity craftingPipe) {
             craftingPipe.setSlotDirection(this.slot(), this.direction());
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundSlotDirectionPayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

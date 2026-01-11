@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ServerBoundTransferRecipePayload(List<ItemStack> recipe, List<Integer> slots) implements SelfHandler {
+public record ServerBoundTransferRecipePayload(List<ItemStack> recipe, List<Integer> slots) implements PayloadCodec<ServerBoundTransferRecipePayload>, SelfHandler {
 
     public static final Type<ServerBoundTransferRecipePayload> TYPE = new Type<>(MiscUtil.identifier("transfer_recipe"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundTransferRecipePayload> STREAM_CODEC = StreamCodec.composite(
@@ -39,6 +39,11 @@ public record ServerBoundTransferRecipePayload(List<ItemStack> recipe, List<Inte
                 menu.getSlot(this.slots().get(i)).setChanged();
             }
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundTransferRecipePayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

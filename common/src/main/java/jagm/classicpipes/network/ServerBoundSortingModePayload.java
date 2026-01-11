@@ -11,7 +11,7 @@ import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundSortingModePayload(SortingMode sortingMode) implements SelfHandler {
+public record ServerBoundSortingModePayload(SortingMode sortingMode) implements PayloadCodec<ServerBoundSortingModePayload>, SelfHandler {
 
     public static final CustomPacketPayload.Type<ServerBoundSortingModePayload> TYPE = new CustomPacketPayload.Type<>(MiscUtil.identifier("sorting_mode"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundSortingModePayload> STREAM_CODEC = StreamCodec.composite(
@@ -33,6 +33,11 @@ public record ServerBoundSortingModePayload(SortingMode sortingMode) implements 
                 pipe.setChanged();
             }
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundSortingModePayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

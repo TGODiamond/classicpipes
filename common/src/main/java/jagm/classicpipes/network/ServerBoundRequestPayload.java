@@ -10,7 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public record ServerBoundRequestPayload(ItemStack stack, BlockPos requestPos) implements SelfHandler {
+public record ServerBoundRequestPayload(ItemStack stack, BlockPos requestPos) implements PayloadCodec<ServerBoundRequestPayload>, SelfHandler {
 
     public static final CustomPacketPayload.Type<ServerBoundRequestPayload> TYPE = new CustomPacketPayload.Type<>(MiscUtil.identifier("request"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundRequestPayload> STREAM_CODEC = StreamCodec.composite(
@@ -31,6 +31,11 @@ public record ServerBoundRequestPayload(ItemStack stack, BlockPos requestPos) im
         if (player.level() instanceof ServerLevel serverLevel && player.level().getBlockEntity(this.requestPos()) instanceof NetworkedPipeEntity pipe && pipe.hasNetwork()) {
             pipe.getNetwork().request(serverLevel, this.stack(), this.requestPos(), player, false);
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundRequestPayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

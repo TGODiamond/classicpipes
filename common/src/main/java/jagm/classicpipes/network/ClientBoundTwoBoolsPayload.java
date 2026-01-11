@@ -9,7 +9,7 @@ import net.minecraft.world.ItemStackWithSlot;
 import java.util.ArrayList;
 import java.util.List;
 
-public record ClientBoundTwoBoolsPayload(List<ItemStackWithSlot> items, boolean first, boolean second) {
+public record ClientBoundTwoBoolsPayload(List<ItemStackWithSlot> items, boolean first, boolean second) implements PayloadCodec<ClientBoundTwoBoolsPayload> {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ClientBoundTwoBoolsPayload> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.collection(ArrayList::new, MiscUtil.ITEM_STACK_WITH_SLOT_STREAM_CODEC),
@@ -20,5 +20,10 @@ public record ClientBoundTwoBoolsPayload(List<ItemStackWithSlot> items, boolean 
             ClientBoundTwoBoolsPayload::second,
             ClientBoundTwoBoolsPayload::new
     );
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ClientBoundTwoBoolsPayload> getPayloadCodec() {
+        return STREAM_CODEC;
+    }
 
 }

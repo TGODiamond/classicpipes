@@ -9,7 +9,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundLeaveOnePayload(boolean leaveOne) implements SelfHandler {
+public record ServerBoundLeaveOnePayload(boolean leaveOne) implements PayloadCodec<ServerBoundLeaveOnePayload>, SelfHandler {
 
     public static final Type<ServerBoundLeaveOnePayload> TYPE = new Type<>(MiscUtil.identifier("leave_one"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundLeaveOnePayload> STREAM_CODEC = StreamCodec.composite(
@@ -32,6 +32,12 @@ public record ServerBoundLeaveOnePayload(boolean leaveOne) implements SelfHandle
                 menu.setLeaveOne(this.leaveOne());
             }
         }
+    }
+
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundLeaveOnePayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }

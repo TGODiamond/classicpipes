@@ -10,7 +10,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.world.entity.player.Player;
 
-public record ServerBoundMatchComponentsPayload(boolean matchComponents) implements SelfHandler {
+public record ServerBoundMatchComponentsPayload(boolean matchComponents) implements PayloadCodec<ServerBoundMatchComponentsPayload>, SelfHandler {
 
     public static final CustomPacketPayload.Type<ServerBoundMatchComponentsPayload> TYPE = new CustomPacketPayload.Type<>(MiscUtil.identifier("match_components"));
     public static final StreamCodec<RegistryFriendlyByteBuf, ServerBoundMatchComponentsPayload> STREAM_CODEC = StreamCodec.composite(
@@ -34,6 +34,11 @@ public record ServerBoundMatchComponentsPayload(boolean matchComponents) impleme
                 default -> {}
             }
         }
+    }
+
+    @Override
+    public StreamCodec<RegistryFriendlyByteBuf, ServerBoundMatchComponentsPayload> getPayloadCodec() {
+        return STREAM_CODEC;
     }
 
 }
